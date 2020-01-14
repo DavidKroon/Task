@@ -1,4 +1,4 @@
-from rest_framework import routers, serializers, viewsets, status
+from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from Articles.models import Article
@@ -28,7 +28,7 @@ class ArticleViewSet(viewsets.ViewSet):
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
-        # print(data)
+    # print(data)
     # print(data['title'])
     # newArticle=Article(5,data['title'],data['content'],data['created_at'],data['updated_at'],data['author'])
     # print (newArticle)
