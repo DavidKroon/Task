@@ -19,11 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserArticleSerializer(serializers.ModelSerializer):
-    #queryset = Article.objects.all()
-    #articles = ArticleSerializer(many=True, read_only=True)
     articles = serializers.SerializerMethodField()
     print(articles)
-
     def get_articles(self, obj):
         print(' context: ', self.context)
         queryset = Article.objects.filter(author=obj.id).select_related('author')
@@ -36,7 +33,6 @@ class UserArticleSerializer(serializers.ModelSerializer):
 
 
 class ArticleUserSerializer(serializers.ModelSerializer):
-    #author = UserSerializer(read_only=True)
     user = serializers.SerializerMethodField()
     def get_user(self, obj):
         print(' context: ',self.context)
