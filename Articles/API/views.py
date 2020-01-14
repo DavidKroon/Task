@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from Articles.models import Article
+from Articles.models import Article,ArticleTest   # for testing
 from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
@@ -89,12 +89,12 @@ class UserArticleViewSet(viewsets.ViewSet):
 #REST Get full user for an article
 class ArticlesUserViewSet(viewsets.ViewSet):
     def list(self,request):
-        queryset=Article.objects.all()
+        queryset=Article.objects.all()   #TEST
         serializer=ArticleUserSerializer(queryset,many=True,context={'request':request})
         return  Response(serializer.data)
     def retrieve(self,request,pk=None):
         print(pk)
-        queryset=Article.objects.filter(id=pk)
+        queryset=Article.objects.filter(id=pk)    #TEST
         print(queryset)
         sertializer=ArticleUserSerializer(queryset,many=True,context={'request':request})
         return Response(sertializer.data)

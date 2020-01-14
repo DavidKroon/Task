@@ -1,11 +1,13 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from rest_framework import routers, serializers, viewsets
-from Articles.models import Article
+from Articles.models import Article,ArticleTest # testing article, don't forget to remove it
 from django.contrib.auth.models import User
 from rest_framework import filters
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Article
+        model = ArticleTest
         fields = "__all__"
 
 
@@ -35,12 +37,18 @@ class ArticleUserSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     def get_user(self, obj):
         print(' context: ',self.context)
-        queryset = User.objects.filter(id=obj.author.id)
-        user = UserSerializer(queryset,context=self.context,many=True).data
-        return user
+        try:
+             print('USAO')
+             queryset = User.objects.filter(id=obj.author.id).first()
+        except AttributeError:
+            return None
+
+        if queryset is None:
+            return None
+        return UserSerializer(queryset, context=self.context).data
 
     class Meta:
-        model = Article
+        model = ArticleTest
         fields = ['title','content','user']
 
 
