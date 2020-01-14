@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from Articles.models import Article
-from Articles.API.serializers import ArticleSerializer, UserSerializer
+from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
 
@@ -19,6 +19,7 @@ class ArticleViewSet(viewsets.ViewSet):
         print(queryset)
         serializer = ArticleSerializer(queryset, many=True)
         return Response(serializer.data)
+
     def create(self, request):
         data = request.data
         serialized = ArticleSerializer(data=data)
@@ -71,3 +72,30 @@ class UserViewSet(viewsets.ModelViewSet):
         articles = Article.objects.filter(author=author.id) # user id
         serlializer = ArticleSerializer(articles, many=True)
         return Response(serlializer.data)
+
+#REST Get all articles for a user
+class UserArticleViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset = User.objects.all()
+        sertializer = UserArticleSerializer(queryset, many=True)
+        return Response(sertializer.data)
+    def retrieve(self,request,pk=None):
+        print(pk)
+        queryset=User.objects.filter(id=pk)
+        print(queryset)
+        sertializer=UserArticleSerializer(queryset,many=True)
+        return Response(sertializer.data)
+
+#REST Get full user for an article
+class ArticlesUserViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset=Article.objects.all()
+        serializer=ArticleUserSerializer(queryset,many=True,context={'request':request})
+        return  Response(serializer.data)
+    def retrieve(self,request,pk=None):
+        print(pk)
+        queryset=Article.objects.filter(id=pk)
+        print(queryset)
+        sertializer=ArticleUserSerializer(queryset,many=True,context={'request':request})
+        return Response(sertializer.data)
+
