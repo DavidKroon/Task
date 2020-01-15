@@ -17,6 +17,7 @@ from django.urls import path, include
 from rest_framework import routers
 from Articles.API.views import ArticleViewSet, UserViewSet,UserArticleViewSet,ArticlesUserViewSet,NestedUserArticlesViewSet,ArticleUserJoinViewSet
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework_simplejwt import views as jwt_views
 
 schema_view = get_swagger_view(title='Pastebin API')
 
@@ -33,7 +34,9 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/users/<int:pk>/articles/<int:ar_pk>/', UserViewSet.as_view(actions={'get': 'article'})),
     path('api/users/<int:pk>/articles', UserViewSet.as_view(actions={'get': 'articles'})),
-    path('', schema_view)
+    path('', schema_view),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh')
 
 
 

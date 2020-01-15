@@ -5,10 +5,12 @@ from Articles.models import Article,ArticleTest   # for testing
 from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
 
 
 # rest for articles ////////////////////////////////////////
 class ArticleViewSet(viewsets.ViewSet):
+
     def list(self, request):
         print(request.query_params)
         if request.query_params:
