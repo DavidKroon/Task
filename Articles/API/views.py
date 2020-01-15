@@ -13,7 +13,9 @@ class ArticleViewSet(viewsets.ViewSet):
         print(request.query_params)
         if request.query_params:
             search = request.query_params['search']
-            queryset = Article.objects.filter(title=search)
+            date = request.query_params['date']
+            queryset = Article.objects.filter(title=search,created_at=date)
+
         else:
             queryset = Article.objects.all()
         print(queryset)
@@ -103,7 +105,7 @@ class ArticlesUserViewSet(viewsets.ViewSet):
 #NestedViewset
 class NestedUserArticlesViewSet(viewsets.ViewSet):
     def list(self, request):
-        queryset = User.objects.all()
+        queryset = User.objects.order_by('id').all()
         serializer = NestedUserArticleSerializer(queryset,many=True)
         return Response(serializer.data)
     def retrieve(self,request,pk=None):

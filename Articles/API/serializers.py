@@ -25,8 +25,8 @@ class UserArticleSerializer(serializers.ModelSerializer):
     print(articles)
     def get_articles(self, obj):
         print(' context: ', self.context)
-        queryset = Article.objects.filter(author=obj.id).select_related('author')
-        articles = ArticleSerializer(queryset,many=True).data
+        queryset = Article.objects.filter(author=obj.id)
+        articles = ArticleSerializer(queryset, many=True).data
         return articles
 
     class Meta:
@@ -49,18 +49,20 @@ class ArticleUserSerializer(serializers.ModelSerializer):
         return UserSerializer(queryset, context=self.context).data
 
     class Meta:
-        model = ArticleTest
-        fields = ['title','content','user']
+        model = Article
+        fields = ['title', 'content', 'user']
 
 
 class NestedUserArticleSerializer(serializers.ModelSerializer):
     print('asdasdasdasdasd')
 
-    articles = ArticleSerializer(many=True,read_only=True)
+    articles = ArticleSerializer(many=True, read_only=True)
 
     print(articles)
 
     class Meta:
         model = User
-        fields = ['id','username','articles']
+        fields = ['id', 'username', 'articles']
+
+
 
