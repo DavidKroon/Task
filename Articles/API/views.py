@@ -2,10 +2,11 @@ from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from Articles.models import Article,ArticleTest   # for testing
-from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer
+from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer,MyTokenObtainPairSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 # rest for articles ////////////////////////////////////////
@@ -79,6 +80,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 #REST Get all articles for a user
 class UserArticleViewSet(viewsets.ViewSet):
+    permission_classes = (IsAdminUser,)
     def list(self, request):
         queryset = User.objects.all()
         sertializer = UserArticleSerializer(queryset, many=True)
@@ -126,3 +128,7 @@ class ArticleUserJoinViewSet(viewsets.ViewSet):
         quertyset=Article.objects.select_related().filter(id=pk).first()
         serializer=ArticleUserJoinSerializer(quertyset)
         return Response(serializer.data)
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
