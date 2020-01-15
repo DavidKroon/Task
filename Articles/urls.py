@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include
 from rest_framework import routers
-from Articles.API.views import ArticleViewSet, UserViewSet,UserArticleViewSet,ArticlesUserViewSet,NestedUserArticlesViewSet
+from Articles.API.views import ArticleViewSet, UserViewSet,UserArticleViewSet,ArticlesUserViewSet,NestedUserArticlesViewSet,ArticleUserJoinViewSet
 from rest_framework_swagger.views import get_swagger_view
 
 schema_view = get_swagger_view(title='Pastebin API')
@@ -26,6 +26,7 @@ router.register(r'articles', ArticleViewSet, basename='articles')
 router.register(r'userarticles',UserArticleViewSet,basename='userarticles')
 router.register(r'articlesuser',ArticlesUserViewSet,basename='articlesuser')
 router.register(r'nesteduserarticle',NestedUserArticlesViewSet,basename='nesteduserarticle')
+router.register(r'articleuserjoin',ArticleUserJoinViewSet,basename='articleuserjoin')
 
 urlpatterns = [
     path('api/', include(router.urls)),  # route

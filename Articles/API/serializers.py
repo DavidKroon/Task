@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff', 'articles']
+        fields = ['url', 'username', 'email', 'is_staff']
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
 
@@ -35,22 +35,13 @@ class UserArticleSerializer(serializers.ModelSerializer):
 
 
 class ArticleUserSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
-    def get_user(self, obj):
-        print(' context: ',self.context)
-        try:
-             print('USAO')
-             queryset = User.objects.filter(id=obj.author.id).first()
-        except AttributeError:
-            return None
+    author = UserSerializer()
 
-        if queryset is None:
-            return None
-        return UserSerializer(queryset, context=self.context).data
+
 
     class Meta:
         model = Article
-        fields = ['title', 'content', 'user']
+        fields = ['title', 'content', 'author']
 
 
 class NestedUserArticleSerializer(serializers.ModelSerializer):
@@ -64,5 +55,11 @@ class NestedUserArticleSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'articles']
 
+
+class ArticleUserJoinSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Article
+        fields = '__all__'
 
 

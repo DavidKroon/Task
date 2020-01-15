@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from Articles.models import Article,ArticleTest   # for testing
-from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer
+from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
 
@@ -14,7 +14,7 @@ class ArticleViewSet(viewsets.ViewSet):
         if request.query_params:
             search = request.query_params['search']
             date = request.query_params['date']
-            queryset = Article.objects.filter(title=search,created_at=date)
+            queryset = Article.objects.filter(title=search, created_at=date)
 
         else:
             queryset = Article.objects.all()
@@ -111,4 +111,16 @@ class NestedUserArticlesViewSet(viewsets.ViewSet):
     def retrieve(self,request,pk=None):
         quertyset=User.objects.filter(id=pk)
         serializer=NestedUserArticleSerializer(quertyset,many=True)
+        return Response(serializer.data)
+
+
+class ArticleUserJoinViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset=Article.objects.all()
+        print(queryset)
+        serializer=ArticleUserJoinSerializer(queryset,many=True)
+        return Response(serializer.data)
+    def retrieve(self,request,pk=None):
+        quertyset=Article.objects.select_related().filter(id=pk).first()
+        serializer=ArticleUserJoinSerializer(quertyset)
         return Response(serializer.data)
