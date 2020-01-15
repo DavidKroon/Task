@@ -7,14 +7,15 @@ from rest_framework import filters
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ArticleTest
+        model = Article
         fields = "__all__"
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        fields = ['url', 'username', 'email', 'is_staff', 'articles']
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
 
@@ -52,5 +53,14 @@ class ArticleUserSerializer(serializers.ModelSerializer):
         fields = ['title','content','user']
 
 
+class NestedUserArticleSerializer(serializers.ModelSerializer):
+    print('asdasdasdasdasd')
 
+    articles = ArticleSerializer(many=True,read_only=True)
+
+    print(articles)
+
+    class Meta:
+        model = User
+        fields = ['id','username','articles']
 

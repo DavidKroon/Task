@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from Articles.models import Article,ArticleTest   # for testing
-from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer
+from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
 
@@ -75,27 +75,38 @@ class UserViewSet(viewsets.ModelViewSet):
 
 #REST Get all articles for a user
 class UserArticleViewSet(viewsets.ViewSet):
-    def list(self,request):
+    def list(self, request):
         queryset = User.objects.all()
         sertializer = UserArticleSerializer(queryset, many=True)
         return Response(sertializer.data)
     def retrieve(self,request,pk=None):
         print(pk)
-        queryset=User.objects.filter(id=pk)
+        queryset = User.objects.filter(id=pk)
         print(queryset)
-        sertializer=UserArticleSerializer(queryset,many=True)
+        sertializer = UserArticleSerializer(queryset,many=True)
         return Response(sertializer.data)
 
 #REST Get full user for an article
 class ArticlesUserViewSet(viewsets.ViewSet):
-    def list(self,request):
-        queryset=Article.objects.all()   #TEST
-        serializer=ArticleUserSerializer(queryset,many=True,context={'request':request})
+    def list(self, request):
+        queryset = Article.objects.all()   #TEST
+        serializer = ArticleUserSerializer(queryset,many=True,context={'request':request})
         return  Response(serializer.data)
     def retrieve(self,request,pk=None):
         print(pk)
-        queryset=Article.objects.filter(id=pk)    #TEST
+        queryset = Article.objects.filter(id=pk)    #TEST
         print(queryset)
-        sertializer=ArticleUserSerializer(queryset,many=True,context={'request':request})
+        sertializer = ArticleUserSerializer(queryset,many=True,context={'request':request})
         return Response(sertializer.data)
 
+
+#NestedViewset
+class NestedUserArticlesViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = User.objects.all()
+        serializer = NestedUserArticleSerializer(queryset,many=True)
+        return Response(serializer.data)
+    def retrieve(self,request,pk=None):
+        quertyset=User.objects.filter(id=pk)
+        serializer=NestedUserArticleSerializer(quertyset,many=True)
+        return Response(serializer.data)
