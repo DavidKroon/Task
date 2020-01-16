@@ -1,12 +1,13 @@
 from rest_framework import viewsets, status
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework.response import Response
-from Articles.models import Article,ArticleTest   # for testing
-from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer,MyTokenObtainPairSerializer
+from Articles.models import Article, Category, ArticleTest   # for testing
+from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer,MyTokenObtainPairSerializer,CategoryArticleSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
+import jwt
 
 
 # rest for articles ////////////////////////////////////////
@@ -60,6 +61,8 @@ class ArticleViewSet(viewsets.ViewSet):
         article = Article.objects.filter(id=pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 # rest for user //////////////////////////////////////
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -132,3 +135,14 @@ class ArticleUserJoinViewSet(viewsets.ViewSet):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+class CategoriesViewSet(viewsets.ViewSet):
+    def list(self,request):
+        queryset=Category.objects.all()
+        serializer = CategoryArticleSerializer(queryset,many=True)
+        return Response(serializer.data)
+
+
+
+

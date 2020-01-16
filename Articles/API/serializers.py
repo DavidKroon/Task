@@ -1,22 +1,52 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from rest_framework import routers, serializers, viewsets
-from Articles.models import Article,ArticleTest # testing article, don't forget to remove it
+from Articles.models import Article,Category, ArticleTest # testing article, don't forget to remove it
 from django.contrib.auth.models import User
 from rest_framework import filters
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
 
-class ArticleSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Article
+        model = Category
         fields = "__all__"
 
 
-class UserSerializer(serializers.ModelSerializer):
+
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+    category=CategorySerializer(many=True,read_only=True)
+    class Meta:
+        model = Article
+        fields = "__all__"
+        read_only_fields = [
+            'category'
+        ]
+
+
+class CategoryArticleSerializer(serializers.ModelSerializer):
+    articles=serializers.SerializerMethodField()
+
+    def get_articles(self,obj):
+        print(obj.id)
+        queryset=Article.objects.filter(category=obj.id)
+        serializer=ArticleSerializer(queryset,many=True)
+        return serializer.data
 
     class Meta:
+        model = Category
+        fields = ['title','articles']
+
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    articles = ArticleSerializer(many=True)
+    class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+        fields = ['url', 'username', 'email', 'is_staff','articles']
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
 
@@ -32,6 +62,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         token['is_staff'] = user.is_staff
         # ...
+
+
 
         return token
 
@@ -77,5 +109,7 @@ class ArticleUserJoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
+
+
 
 

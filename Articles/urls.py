@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include
 from rest_framework import routers
-from Articles.API.views import ArticleViewSet, UserViewSet,UserArticleViewSet,ArticlesUserViewSet,NestedUserArticlesViewSet,ArticleUserJoinViewSet,MyTokenObtainPairView
+from Articles.API.views import ArticleViewSet, UserViewSet,UserArticleViewSet,ArticlesUserViewSet,NestedUserArticlesViewSet,ArticleUserJoinViewSet,MyTokenObtainPairView,CategoriesViewSet
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework_simplejwt import views as jwt_views
 
@@ -28,6 +28,9 @@ router.register(r'userarticles',UserArticleViewSet,basename='userarticles')
 router.register(r'articlesuser',ArticlesUserViewSet,basename='articlesuser')
 router.register(r'nesteduserarticle',NestedUserArticlesViewSet,basename='nesteduserarticle')
 router.register(r'articleuserjoin',ArticleUserJoinViewSet,basename='articleuserjoin')
+router.register(r'categories',CategoriesViewSet,basename='categories')
+
+
 
 urlpatterns = [
     path('api/', include(router.urls)),  # route
@@ -36,7 +39,8 @@ urlpatterns = [
     path('api/users/<int:pk>/articles', UserViewSet.as_view(actions={'get': 'articles'})),
     path('', schema_view),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh')
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+
 
 
 
