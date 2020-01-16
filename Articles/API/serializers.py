@@ -18,13 +18,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    category=CategorySerializer(many=True,read_only=True)
+    category=CategorySerializer(many=True)
     class Meta:
         model = Article
         fields = "__all__"
-        read_only_fields = [
-            'category'
-        ]
+
 
 
 class CategoryArticleSerializer(serializers.ModelSerializer):
@@ -43,6 +41,7 @@ class CategoryArticleSerializer(serializers.ModelSerializer):
 
 
 
+
 class UserSerializer(serializers.ModelSerializer):
     #articles = ArticleSerializer(many=True)
     class Meta:
@@ -50,7 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['url', 'username', 'email', 'is_staff','articles']
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
-        depth= 2
+        depth = 2
 
 
 
