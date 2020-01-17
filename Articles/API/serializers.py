@@ -14,7 +14,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    # category = CategorySerializer(many=True, read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False)
     author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False, required=True)
 
@@ -24,7 +23,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 class CategoryArticleSerializer(serializers.ModelSerializer):
-    articles=serializers.SerializerMethodField()
+    articles = serializers.SerializerMethodField()
 
     def get_articles(self ,obj):
         print(obj.id)
@@ -41,7 +40,7 @@ class CategoryArticleSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    #articles = ArticleSerializer(many=True)
+
     class Meta:
         model = User
         fields = ['url', 'username', 'email', 'is_staff','articles']
