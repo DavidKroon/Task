@@ -18,8 +18,8 @@ class ArticleViewSet(viewsets.ViewSet):
         search = ''
         date = '-'
         if request.query_params:
-            if  request.query_params.get('search', None):
-                search=request.query_params['search']
+            if request.query_params.get('search', None):
+                search = request.query_params['search']
 
             if request.query_params.get('date', None):
                 date = request.query_params['date']
@@ -29,7 +29,7 @@ class ArticleViewSet(viewsets.ViewSet):
             queryset = Article.objects.all()
         print(queryset)
         serializer = ArticleSerializer(queryset, many=True)
-        data=serializer.data
+        data = serializer.data
         return Response(data)
 
     def create(self, request):
@@ -69,12 +69,12 @@ class ArticleViewSet(viewsets.ViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username','last_login']  # works, filters username
+    search_fields = ['username', 'last_login']  # works, filters username
     print(queryset)
     serializer_class = UserSerializer
     def article(self, request, pk=None, ar_pk=None):
         author = self.get_object()
-        articles = Article.objects.filter(author=author.id,id=ar_pk) # user id and article id
+        articles = Article.objects.filter(author=author.id, id=ar_pk) # user id and article id
         serlializer = ArticleSerializer(articles, many=True)
         return Response(serlializer.data)
     def articles(self, request, pk=None, ar_pk=None):
