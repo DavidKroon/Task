@@ -100,7 +100,7 @@ class ArticlesUserViewSet(viewsets.ViewSet):
         queryset = Article.objects.all()   #TEST
         serializer = ArticleUserSerializer(queryset,many=True,context={'request':request})
         return  Response(serializer.data)
-    def retrieve(self,request,pk=None):
+    def retrieve(self, request, pk=None):
         print(pk)
         queryset = Article.objects.filter(id=pk)    #TEST
         print(queryset)
@@ -121,12 +121,12 @@ class NestedUserArticlesViewSet(viewsets.ViewSet):
 
 
 class ArticleUserJoinViewSet(viewsets.ViewSet):
-    def list(self,request):
+    def list(self, request):
         queryset=Article.objects.all()
         print(queryset)
         serializer=ArticleUserJoinSerializer(queryset,many=True)
         return Response(serializer.data)
-    def retrieve(self,request,pk=None):
+    def retrieve(self, request, pk=None):
         quertyset=Article.objects.select_related().filter(id=pk).first()
         serializer=ArticleUserJoinSerializer(quertyset)
         return Response(serializer.data)
@@ -137,7 +137,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 class CategoriesViewSet(viewsets.ViewSet):
-    def list(self,request):
+    def list(self, request):
         queryset=Category.objects.all()
         serializer = CategoryArticleSerializer(queryset,many=True)
         return Response(serializer.data)
