@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'Articles',
-
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,8 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_swagger',
-    'rest_framework_simplejwt'
+    'rest_framework_simplejwt',
+
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
