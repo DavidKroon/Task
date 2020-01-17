@@ -14,8 +14,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    #category = CategorySerializer(many=True, read_only=True)
-    #category = serializers.PrimaryKeyRelatedField(many=True)
+    # category = CategorySerializer(many=True, read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True)
 
     class Meta:
         model = Article

@@ -1,13 +1,13 @@
 from rest_framework import viewsets, status
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from Articles.models import Article, Category, ArticleTest   # for testing
+from Articles.models import Article, Category
 from Articles.API.serializers import ArticleSerializer, UserSerializer,UserArticleSerializer,ArticleUserSerializer,NestedUserArticleSerializer, ArticleUserJoinSerializer,MyTokenObtainPairSerializer,CategoryArticleSerializer
 from django.contrib.auth.models import User
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
-import jwt
+
 
 
 # rest for articles ////////////////////////////////////////
@@ -15,16 +15,22 @@ class ArticleViewSet(viewsets.ViewSet):
 
     def list(self, request):
         print(request.query_params)
+        search=''
+        date='-'
         if request.query_params:
-            search = request.query_params['search']
-            date = request.query_params['date']
-            queryset = Article.objects.filter(title=search, created_at=date)
+            if  request.query_params.get('search',None):
+                search=request.query_params['search']
 
+            if request.query_params.get('date', None):
+                date = request.query_params['date']
+
+            queryset = Article.objects.filter(title__contains=search,created_at__contains=date)
         else:
             queryset = Article.objects.all()
         print(queryset)
         serializer = ArticleSerializer(queryset, many=True)
-        return Response(serializer.data)
+        data=serializer.data
+        return Response(data)
 
     def create(self, request):
         data = request.data
