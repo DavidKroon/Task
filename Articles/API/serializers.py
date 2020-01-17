@@ -15,12 +15,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     # category = CategorySerializer(many=True, read_only=True)
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), many=True, required=False)
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False, required=True)
 
     class Meta:
         model = Article
         fields = "__all__"
-        #depth = 2
 
 
 class CategoryArticleSerializer(serializers.ModelSerializer):

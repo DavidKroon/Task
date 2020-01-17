@@ -24,17 +24,14 @@ class ArticleViewSet(viewsets.ViewSet):
             if request.query_params.get('date', None):
                 date = request.query_params['date']
 
-            queryset = Article.objects.filter(title__contains=search, created_at__contains=date)
+            queryset = Article.objects.filter(title__icontains=search, created_at__contains=date)
         else:
             queryset = Article.objects.all()
-        print(queryset)
         serializer = ArticleSerializer(queryset, many=True)
-        data = serializer.data
-        return Response(data)
+        return Response(serializer.data)
 
     def create(self, request):
-        data = request.data
-        serialized = ArticleSerializer(data=data)
+        serialized = ArticleSerializer(data=request.data)
         print(serialized)
         if serialized.is_valid():
             serialized.save()
