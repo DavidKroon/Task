@@ -15,16 +15,16 @@ class ArticleViewSet(viewsets.ViewSet):
 
     def list(self, request):
         print(request.query_params)
-        search=''
-        date='-'
+        search = ''
+        date = '-'
         if request.query_params:
-            if  request.query_params.get('search',None):
+            if  request.query_params.get('search', None):
                 search=request.query_params['search']
 
             if request.query_params.get('date', None):
                 date = request.query_params['date']
 
-            queryset = Article.objects.filter(title__contains=search,created_at__contains=date)
+            queryset = Article.objects.filter(title__contains=search, created_at__contains=date)
         else:
             queryset = Article.objects.all()
         print(queryset)
@@ -41,12 +41,6 @@ class ArticleViewSet(viewsets.ViewSet):
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
-    # print(data)
-    # print(data['title'])
-    # newArticle=Article(5,data['title'],data['content'],data['created_at'],data['updated_at'],data['author'])
-    # print (newArticle)
-    # newArticle.save()
-    # return status.HTTP_201_CREATED
     def retrieve(self, request, pk=None):
         queryset = Article.objects.all()
         article = get_object_or_404(queryset.filter(), pk=pk)
