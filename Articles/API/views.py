@@ -47,13 +47,15 @@ class ArticleViewSet(viewsets.ViewSet):
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
     def update(self, request, pk=None):
+        instance = Article.objects.get(pk=pk)
         data = request.data
+
         print(data)
-        serialized = ArticleSerializer(data=data)
-        print(serialized)
+        serialized = ArticleSerializer(instance=instance, data=data)
+        #print(serialized)
         if serialized.is_valid():
             serialized.save()
-            return Response(serialized.data, status=201)
+            return Response(serialized.data, status=204)
         else:
             return Response(serialized._errors, status=400)
     def destroy(self, request, pk=None):

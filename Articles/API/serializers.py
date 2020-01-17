@@ -13,30 +13,28 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
-
-
-
 class ArticleSerializer(serializers.ModelSerializer):
-    category=CategorySerializer(many=True)
+    #category = CategorySerializer(many=True, read_only=True)
+    #category = serializers.PrimaryKeyRelatedField(many=True)
+
     class Meta:
         model = Article
         fields = "__all__"
-
+        #depth = 2
 
 
 class CategoryArticleSerializer(serializers.ModelSerializer):
     articles=serializers.SerializerMethodField()
 
-    def get_articles(self,obj):
+    def get_articles(self ,obj):
         print(obj.id)
-        queryset=Article.objects.filter(category=obj.id)
-        serializer=ArticleSerializer(queryset,many=True)
+        queryset = Article.objects.filter(category=obj.id)
+        serializer = ArticleSerializer(queryset, many=True)
         return serializer.data
 
     class Meta:
         model = Category
-        fields = ['title','articles']
+        fields = ['title', 'articles']
 
 
 

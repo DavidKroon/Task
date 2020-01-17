@@ -24,13 +24,11 @@ schema_view = get_swagger_view(title='Pastebin API')
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'articles', ArticleViewSet, basename='articles')
-router.register(r'userarticles',UserArticleViewSet,basename='userarticles')
-router.register(r'articlesuser',ArticlesUserViewSet,basename='articlesuser')
-router.register(r'nesteduserarticle',NestedUserArticlesViewSet,basename='nesteduserarticle')
-router.register(r'articleuserjoin',ArticleUserJoinViewSet,basename='articleuserjoin')
-router.register(r'categories',CategoriesViewSet,basename='categories')
-
-
+router.register(r'userarticles', UserArticleViewSet, basename='userarticles')
+router.register(r'articlesuser', ArticlesUserViewSet, basename='articlesuser')
+router.register(r'nesteduserarticle', NestedUserArticlesViewSet, basename='nesteduserarticle')
+router.register(r'articleuserjoin', ArticleUserJoinViewSet, basename='articleuserjoin')
+router.register(r'categories', CategoriesViewSet, basename='categories')
 
 urlpatterns = [
     path('api/', include(router.urls)),  # route
@@ -40,8 +38,4 @@ urlpatterns = [
     path('', schema_view),
     path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-
-
-
-
 ]
