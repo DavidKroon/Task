@@ -43,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'is_staff','articles']
+        fields = ['id', 'url', 'username', 'email', 'is_staff', 'articles']
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
         depth = 2
