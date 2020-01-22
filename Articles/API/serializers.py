@@ -43,10 +43,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'url', 'username', 'email', 'is_staff', 'articles']
+        fields = ['id', 'password', 'url', 'username', 'email', 'is_staff']
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
-        depth = 2
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
 
 
 
