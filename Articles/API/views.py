@@ -80,6 +80,23 @@ class UserViewSet(viewsets.ModelViewSet):
         serlializer = ArticleSerializer(articles, many=True)
         return Response(serlializer.data)
 
+    def update(self, request, pk=None):
+        print("asdasdasdasd")
+        instance = User.objects.get(pk=pk)
+
+        data = request.data
+
+
+        print("moji podaci: ",data)
+        print("instanca : ",instance)
+        serialized = UserSerializer(instance=instance, data=data)
+
+        # print(serialized)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=204)
+        else:
+            return Response(serialized._errors, status=400)
 #REST Get all articles for a user
 class UserArticleViewSet(viewsets.ViewSet):
     permission_classes = (IsAdminUser,)

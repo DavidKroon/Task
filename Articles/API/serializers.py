@@ -43,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'password', 'url', 'username', 'email', 'is_staff']
+        fields = "__all__"
         filter_backends = [filters.SearchFilter]
         search_fields = ['username']
 
@@ -52,8 +52,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-
-
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
