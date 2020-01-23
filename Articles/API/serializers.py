@@ -33,7 +33,7 @@ class CategoryArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['title', 'articles']
+        fields = ['id','title', 'articles']
 
 
 
